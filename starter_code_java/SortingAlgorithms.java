@@ -10,14 +10,49 @@ public class SortingAlgorithms {
      * they will only be used in this class.
      */
 
+    // used in Main.java
+    public long comparisonCount = 0; 
+
+    // helper function used in selectionSort
+    private void swap(Record[] arr, int i, int j) { 
+        Record temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+    }
+
     public void insertionSort(Record[] arr, int n) {
         // TODO: Implement this sorting algorithm here.
+        for (int i = 1; i < n; i++) {
+            Record key = arr[i];
+            int j = i - 1;
+            boolean placeFound = false; 
+            
+            while (j >= 0 && !placeFound) {
+                comparisonCount++; 
 
+                if (arr[j].getIdNumber() > key.getIdNumber()) {
+                    arr[j + 1] = arr[j];
+                    j = j - 1;
+                } else {
+                    placeFound = true;
+                }
+            }
+            arr[j + 1] = key;
+        }
     }
 
     public void selectionSort(Record[] arr, int n) {
         // TODO: Implement this sorting algorithm here.
-
+        for (int i = 0; i < n - 1; i++) {
+            int minIdx = i;
+            for (int j = i + 1; j < n; j++) {
+                comparisonCount++; 
+                if (arr[j].getIdNumber() < arr[minIdx].getIdNumber()) {
+                    minIdx = j;
+                }
+            }
+            swap(arr, minIdx, i);
+        }
     }
 
     public void mergeSort(Record[] arr, int p, int r) {
@@ -30,5 +65,6 @@ public class SortingAlgorithms {
      * ones given above. Make sure that the method accepts an array of
      * records
      */
+
 
 }
