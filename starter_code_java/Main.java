@@ -1,3 +1,6 @@
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Arrays;
 
 public class Main {
@@ -5,7 +8,7 @@ public class Main {
         // TODO: Use this method to run your experiments.
 
         // CHANGE THIS TO YOUR FILE PATH
-        String folderPath = "C:\\Users\\Hanna Jade\\Downloads\\starter_code_java CCDSALG\\starter_code_java\\data\\";
+        String folderPath = "C:\\Users\\marti\\Documents\\CCDSALG\\CCDSALG-S18-MCO1-G3\\starter_code_java\\data\\";
 
         String[] files = {
                 folderPath + "random100.txt",
@@ -32,10 +35,20 @@ public class Main {
 
             runExperiment(sorter, originalData, "Insertion Sort", filePath);
             runExperiment(sorter, originalData, "Selection Sort", filePath);
-//            runExperiment(sorter, originalData, "Merge Sort", filePath);
-//            runExperiment(sorter, originalData, "", filePath);
+            runExperiment(sorter, originalData, "Merge Sort", filePath);
+            runExperiment(sorter, originalData, "Radix Sort", filePath);
 
             System.out.println("-----------------------------------------------------------------------");
+        }
+    }
+    private static void saveSortedData(Record[] data, String algo, String originalFileName) {
+        String outputFileName = "sorted_" + algo.replace(" ", "") + "_" + originalFileName;
+        try (PrintWriter writer = new PrintWriter(new FileWriter(outputFileName))) {
+            for (Record r : data) {
+                writer.println(r.getIdNumber() + " " + r.getName()); 
+            }
+        } catch (IOException e) {
+            System.err.println("Could not save sorted file: " + e.getMessage());
         }
     }
 
@@ -55,11 +68,11 @@ public class Main {
                 sorter.insertionSort(dataCopy, n);
             } else if (algoName.equals("Selection Sort")) {
                 sorter.selectionSort(dataCopy, n);
-            } //else if (algoName.equals("Merge Sort")) {
-//
-//            } else if (algoName.equals("")) {
-//
-//            }
+            }else if (algoName.equals("Merge Sort")) {
+                sorter.mergeSort(dataCopy, 0, n - 1); 
+            } else if (algoName.equals("Radix Sort")) {
+                sorter.radixSort(dataCopy); 
+            }
 
             long endTime = System.currentTimeMillis();
             totalTime += (endTime - startTime);
@@ -77,11 +90,11 @@ public class Main {
             sorter.insertionSort(dataCopyForCount, n);
         } else if (algoName.equals("Selection Sort")) {
             sorter.selectionSort(dataCopyForCount, n);
-        } //else if (algoName.equals("Merge Sort")) {
-//            sorter.mergeSort(dataCopyForCount, 0, n - 1);
-//        } else if (algoName.equals("")) {
-//
-//        }
+        } else if (algoName.equals("Merge Sort")) {
+            sorter.mergeSort(dataCopyForCount, 0, n - 1);
+        } else if (algoName.equals("Radix Sort")) {
+            sorter.radixSort(dataCopyForCount);
+        }
 
         // retrieve the count manually
         comparisons = sorter.comparisonCount;
@@ -89,6 +102,9 @@ public class Main {
         // format filename for cleaner output
         String fileName = new java.io.File(filePath).getName();
 
+        saveSortedData(dataCopyForCount, algoName, fileName); 
+
         System.out.printf("%-25s %-15s %-15.2f %-15d\n", fileName, algoName, avgTime, comparisons);
     }
+
 }
