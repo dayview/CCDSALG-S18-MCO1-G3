@@ -7,8 +7,10 @@ public class Main {
     public static void main(String[] args) {
         // TODO: Use this method to run your experiments.
 
+        System.out.println("Working Directory: " + System.getProperty("user.dir"));
+
         // CHANGE THIS TO YOUR FILE PATH
-        String folderPath = "C:\\Users\\marti\\Documents\\CCDSALG\\CCDSALG-S18-MCO1-G3\\starter_code_java\\data\\";
+        String folderPath = "data/";
 
         String[] files = {
                 folderPath + "random100.txt",
