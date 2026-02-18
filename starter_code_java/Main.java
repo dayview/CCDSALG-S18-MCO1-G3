@@ -2,6 +2,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Main {
     public static void main(String[] args) {
@@ -104,9 +106,36 @@ public class Main {
         // format filename for cleaner output
         String fileName = new java.io.File(filePath).getName();
 
+        verifyIdNameAssociation(originalData, dataCopyForCount, algoName, fileName);
         saveSortedData(dataCopyForCount, algoName, fileName); 
 
         System.out.printf("%-25s %-15s %-15.2f %-15d\n", fileName, algoName, avgTime, comparisons);
     }
 
+    private static void verifyIdNameAssociation(Record[] original, Record[] sorted, String algoName, String fileName) {
+        Map<Integer, String> idToName = new HashMap<>();
+        for (Record r : original) {
+            idToName.put(r.getIdNumber(), r.getName());
+        }
+
+        for (Record r : sorted) {
+            String expectedName = idToName.get(r.getIdNumber());
+            if (expectedName == null || !expectedName.equals(r.getName())) {
+                throw new IllegalStateException(
+                        "ID to name association broken, Dataset: " + fileName +
+                                ", Algorithm: " + algoName +
+                                ", ID: " + r.getIdNumber() +
+                                ", Expected: " + expectedName +
+                                ", Found: " + r.getName()
+                );
+            }
+        }
+
+        System.out.println("Pairing OK, " + fileName + ", " + algoName +
+                ", sample (first 3): " +
+                sorted[0].getIdNumber() + sorted[0].getName() + ", " +
+                sorted[1].getIdNumber() + sorted[1].getName() + ", " +
+                sorted[2].getIdNumber() + sorted[2].getName()
+        );
+    }
 }
